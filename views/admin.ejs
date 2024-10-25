@@ -1,0 +1,38 @@
+<%- include('partials/head'); -%> 
+<script src="/resources/js/funcionescliente.js" defer></script>
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="/resources/css/tablas.css">
+<%- include('partials/header'); -%>
+
+<div class="contenedor2">
+    <h1>Panel de administración</h1>
+    <% if (login) { %>                
+        <h2>Usuario conectado: <br><strong><%= name %></strong></h2>
+            
+        <!-- Menú de botones para cargar las diferentes tablas -->
+
+        <ul class="nave-lista">
+            <li class="nave-item"><a href="/productos" class="nave-link">Productos</a></li>
+            <li class="nave-item"><a href="/categorias" class="nave-link">Categorías</a></li>
+            <li class="nave-item"><a href="/proveedores" class="nave-link">Proveedores</a></li>
+            <li class="nave-item"><a href="/localizacion" class="nave-link">Localización</a></li>
+            <li class="nave-item"><a href="/bajo_stock" class="nave-link">Bajo Stock</a></li>
+            <li class="nave-item"><a href="/usuarios" class="nave-link">Usuarios</a></li>
+        </ul>
+        
+        <% if (rol == 'admin') { %>
+            <nav class="menunave">
+                <ul class="nave-lista">
+                    <li class="nave-item"><a href="#" class="nave-link" onclick="loadTable('usuarios')">Usuarios</a></li>
+                </ul>
+            </nav>
+        <% } %>
+    <% } else { %>
+        <h1><strong><%= name %></strong></h1>
+        <a href="/login" class="a-login">Iniciar sesión</a>
+    <% } %>
+</div>
+
+
+
+<%- include('partials/footer'); -%>

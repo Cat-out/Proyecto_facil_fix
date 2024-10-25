@@ -1,0 +1,19 @@
+<%- include('partials/head'); -%> cargamos head ejs
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<%- include('partials/header', { login: login }); -%> cargar header ejs y pasar la variable login -->
+
+<div class="container">
+    <h2>Editar Usuario</h2>
+    <form action="/usuarios/edit/<%= usuario.id %>" method="POST">
+        <input type="text" name="nombre" value="<%= usuario.nombre %>" required>
+        <input type="text" name="apellido" value="<%= usuario.apellido %>" required>
+        <input type="email" name="email" value="<%= usuario.email %>" required>
+        <input type="text" name="telefono" value="<%= usuario.telefono %>" required>
+        <input type="number" name="rol_id" value="<%= usuario.rol_id %>" required>
+        <input type="password" name="password" placeholder="Nueva Contraseña (opcional)">
+        <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+    </form>
+</div>
+
+<%- include('partials/footer'); -%> cargar footer ejs
+

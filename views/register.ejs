@@ -1,0 +1,62 @@
+<%- include('partials/head'); -%> <!-- cargamos head ejs -->
+<%- include('partials/header'); -%> <!-- cargamos header ejs -->
+
+    <% if (login) { %>
+        <h2>Ya está registrado.</h2>
+        <p>Será redirigido automáticamente a la página de administración</p>                 
+        <script>
+            setTimeout(function(){
+                location.replace('/admin'); 
+            }, 3000);
+            
+        </script>    
+    <% } else { %>
+        <div class="register-form">
+            <h1>Formulario de registro</h1>
+            <form action="/register" method="POST">
+                <label for="user">Nombre</label>
+                    <input type="text" name="nombre" required tabindex="1" autofocus>            
+                <label for="user">Apellido</label>
+                    <input type="text" name="apellido" required tabindex="2">
+                <label for="user">Email</label>
+                    <input type="text" name="email" required tabindex="1" autofocus>            
+                <label for="user">Telefono</label>
+                    <input type="text" name="telefono" required tabindex="2">
+                
+                <label for="rol">Rol</label>                          
+                    <select id="rol" name="rol_id" class="select-css" tabindex="3">
+                        <option value="admin" selected>Admin</option>
+                        <option value="editor">Usuario</option>                    
+                    </select>
+                <br> 
+                <label for="pass">Contraseña</label>
+                    <input type="password" name="password" required tabindex="4">
+                <div class="inline">             
+                    <a href="/" class="btn-cancel">Cancel</a><input type="submit" class="btn-save" value="Save">           
+                </div>
+            </form>		
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
+        <!-- si nuestro alert es diferente de undefined -->
+        <% if (typeof alert != "undefined")  { %>
+            <!-- Código script de Sweet Alert 2 donde asignamos la información que le hemos pasado en el objeto
+            Muestra el mensaje durante un 1.5s y redirige a la ruta principal-->
+            <script>
+                Swal.fire({
+                    title:'<%= alertTitle %>',
+                    text:'<%= alertMessage %>',
+                    icon:'<%= alertIcon %>',
+                    showConfirmButton: <%= showConfirmButton %>,
+                    timer: <%= timer %>
+                }).then(()=>{
+                    window.location='/<%= ruta %>'
+                })
+            </script>
+        <% } %>
+    <% } %>
+
+
+    
+<%- include('partials/footer'); -%>  <!-- cargamos footer ejs -->

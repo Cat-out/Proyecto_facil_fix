@@ -1,0 +1,36 @@
+    <!-- fin del contenido principal de la página -->
+    <!-- contenido del footer-->
+    <br>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Sobre el proyecto</h3>
+                <p>Proyecto de Node para trabajar las sesiones, vistas, registros...</p>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <% if (login) { %>
+                        <li><a href="/">Inicio</a></li>
+                        <li><a href="/admin">Administración</a></li>
+                        <li><a href="logout">Cerrar sesión</a></li>
+                    <% } else { %>
+                        <li><a href="/">Inicio</a></li>
+                        <li><a href="/login">Iniciar sesión</a></li>
+                        <li><a href="/registro">Registro</a></li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>Email: info@IronHack.com</p>
+                <p>Teléfono: 666 777 888</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 IronHack. Todos los derechos reservados.
+        </div>
+    </footer>
+    <!-- fin del contenido del footer -->
+</body>
+</html>

@@ -1,0 +1,81 @@
+<%- include('partials/head'); -%> <!-- Cargamos head ejs -->
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="/resources/css/tablas.css">
+<%- include('partials/header'); -%> <!-- Cargamos header ejs -->
+
+<div class="contenedor2">
+    <h1>Gestión de Usuarios</h1>
+
+    <!-- Botón para mostrar el formulario -->
+    <button id="showFormBtn" class="btn-primary">Agregar Usuario</button>
+
+    <!-- Formulario para crear un nuevo usuario -->
+    <div class="login-form" id="userForm" style="display: none;">
+        <form action="/usuarios" method="POST">
+            <br>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="apellido" placeholder="Apellido" required>
+            <label for="user"></label>
+                    <input type="text" name="email" placeholder="Email" required tabindex="1" autofocus>
+            <input type="text" name="telefono" placeholder="Teléfono" required>
+
+            <select id="rol" name="rol_id" class="select-css" tabindex="3">
+                <option value="1" selected>Admin</option>
+                <option value="2">Usuario</option>
+            </select><br>
+            
+            <input type="password" name="password" placeholder="Contraseña" required>
+
+            <button type="submit" class="btn-login">ENVIAR</button>
+        </form>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="container2 mt-4">
+        <table class="tablab tablab-bordered tablab-striped text-center">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th scope="col">ID</th>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">APELLIDO</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">TELÉFONO</th>
+                    <th scope="col">ROL ID</th>
+                    <th scope="col">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% results.forEach((usuario) => { %>
+                    <tr>
+                        <td><%= usuario.id %></td>
+                        <td><%= usuario.nombre %></td>
+                        <td><%= usuario.apellido %></td>
+                        <td><%= usuario.email %></td>
+                        <td><%= usuario.telefono %></td>
+                        <td><%= usuario.rol_id %></td>
+                        <td>
+                            <a href="/usuarios/edit/<%= usuario.id %>" class="btn btn-outline-info"><i class='bx bxs-edit'></i> Editar</a>
+                            <a href="/usuarios/delete/<%= usuario.id %>" class="btn btn-outline-danger"><i class='bx bxs-trash-alt'></i> Borrar</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Script para mostrar u ocultar el formulario
+document.getElementById("showFormBtn").addEventListener("click", function() {
+    const form = document.getElementById("userForm");
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block"; // Mostrar el formulario
+    } else {
+        form.style.display = "none"; // Ocultar el formulario si ya estaba visible
+    }
+});
+</script>
+
+<%- include('partials/footer'); -%> <!-- Cargamos footer ejs -->
+ChatGPT said:
+GPT

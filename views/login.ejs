@@ -1,0 +1,42 @@
+<%- include('partials/head'); -%> <!-- cargamos head ejs -->
+<%- include('partials/header'); -%> <!-- cargamos header ejs -->
+
+<% if (login) { %>
+    <h2>Ya ha iniciado sesión.</h2>
+    <p>Será redirigido automáticamente a la página de administración</p>                 
+    <script>
+        setTimeout(function(){
+            location.replace('/admin'); 
+        }, 3000);
+    </script>    
+<% } else { %>
+    <div class="register-form">
+        <h1>Login Inventario</h1>
+        <form action="/auth" method="post">
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            <input type="password" name="pass" id="pass" placeholder="Contraseña" required>
+            <input type="submit" class="btn-login" value="Login">
+        </form>
+        
+        <a href="/registro" class="btn-register">Registro</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- Si hay un mensaje de alerta -->
+    <% if (typeof alert != "undefined")  { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            }).then(() => {
+                window.location = '/<%= ruta %>';
+            });
+        </script>
+    <% } %>
+<% } %>
+
+<%- include('partials/footer'); -%> <!-- cargamos footer ejs -->
