@@ -1,0 +1,75 @@
+<%- include('partials/head'); -%>
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="/resources/css/tablas.css">
+<%- include('partials/header'); -%>
+
+<div class="contenedor2">
+    <h1>Gestión de Proveedores</h1>
+
+    <button id="showFormBtn" class="btn-primary">Agregar Proveedor</button>
+
+    <div class="login-form" id="userForm" style="display: none;">
+        <form action="/proveedores" method="POST">
+            <br>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="telefono" placeholder="Teléfono" required>
+            <input type="text" name="web" placeholder="Web" required>
+            <input type="text" name="email" placeholder="Email" required>
+
+            <button type="submit" class="btn-login">ENVIAR</button>
+        </form>
+    </div>
+
+    <div class="container2 mt-4">
+        <table class="tablab tablab-bordered tablab-striped text-center">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th scope="col">ID</th>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">TELEFONO</th>
+                    <th scope="col">WEB</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (results.length > 0) { %>
+                    <% results.forEach((proveedor) => { %>
+                        <tr>
+                            <td><%= proveedor.id %></td>
+                            <td><%= proveedor.nombre %></td>
+                            <td><%= proveedor.telefono %></td>
+                            <td><%= proveedor.web %></td>
+                            <td><%= proveedor.email %></td>
+                            <td>
+                                <a href="/proveedores/edit/<%= proveedor.id %>" class="btn btn-outline-info"><i class='bx bxs-edit'></i> Editar</a>                                <form action="/proveedores/delete/<%= proveedor.id %>" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proveedor?');">
+                                    <button type="submit" class="btn btn-outline-danger"><i class='bx bxs-trash-alt'></i> Borrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6">No hay proveedores registrados.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+document.getElementById("showFormBtn").addEventListener("click", function() {
+    const form = document.getElementById("userForm");
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+});
+</script>
+
+
+
+
+<%- include('partials/footer'); -%>

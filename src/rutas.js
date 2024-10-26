@@ -4,19 +4,12 @@ const rutas = express.Router();
 const bcryptjs = require('bcryptjs');
 const connectionbd = require('../database/db');
 
-
 // 10 - registro. Código que se cargará una vez relleno el formulario de registro
 rutas.post('/register', async (req, res) => {
-    // Variables para guardar la información de los campos
-    const name = req.body.nombre;
-    const lastName = req.body.apellido;
-    const email = req.body.email;
-    const phone = req.body.telefono;
-    const rol = req.body.rol_id;
-    const pass = req.body.password;
+    const { nombre, apellido, email, telefono, rol_id, password } = req.body;
 
     // Validamos que todos los campos requeridos estén presentes
-    if (!name || !lastName || !email || !phone || !rol || !pass) {
+    if (!nombre || !apellido || !email || !telefono || !rol_id || !password) {
         return res.render('register', {
             alert: true,
             alertTitle: "Error",
@@ -29,8 +22,8 @@ rutas.post('/register', async (req, res) => {
         });
     }
 
-    // Mapeamos el rol recibido a su ID correspondiente (por ejemplo, 1 para 'admin')
-    const rolId = rol === 'admin' ? 1 : (rol != 'admin' ? 2 : null);
+    // Mapeamos el rol recibido a su ID correspondiente
+    const rolId = rol_id === 'admin' ? 1 : (rol_id !== 'admin' ? 2 : null);
 
     if (!rolId) {
         return res.render('register', {
@@ -46,18 +39,18 @@ rutas.post('/register', async (req, res) => {
     }
 
     try {
-        // Variable que guarda la contraseña encriptada en 8 iteraciones por el módulo bcrypt
-        let passwordHash = await bcryptjs.hash(pass, 8);
+        // Encriptamos la contraseña
+        const passwordHash = await bcryptjs.hash(password, 8);
 
         // Insertamos los datos en nuestra BBDD
         connectionbd.query('INSERT INTO usuarios SET ?', {
-            nombre: name,
-            apellido: lastName, // Asegúrate de que coincida con la columna en la base de datos
-            email: email,
-            telefono: phone,
-            rol_id: rolId,  // Aquí usamos el ID del rol en lugar de la cadena 'admin'
+            nombre,
+            apellido,
+            email,
+            telefono,
+            rol_id: rolId,
             password: passwordHash
-        }, async (error, results) => {
+        }, (error) => {
             if (error) {
                 console.log(error);
                 return res.render('register', {
@@ -71,7 +64,7 @@ rutas.post('/register', async (req, res) => {
                     login: false
                 });
             } else {
-                // Enviamos el render con un objeto para el Sweet Alert 2
+                // Registro exitoso
                 res.render('register', {
                     alert: true,
                     alertTitle: "Registro",
@@ -99,18 +92,13 @@ rutas.post('/register', async (req, res) => {
     }
 });
 
-
-// 11 - Método para la autenticación para el post definido como /auth. Método que se utiliza en el formulario para iniciar sesión
+// 11 - Método para la autenticación
 rutas.post('/auth', async (req, res) => {
-    const email = req.body.email;
-    const pass = req.body.pass;
+    const { email, pass } = req.body;
 
-    // Comprobamos si existe el usuario y la contraseña
     if (email && pass) {
-        // Comprobamos si existe el usuario en la base de datos
-        connectionbd.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results, fields) => {
-            // Comprobamos si hemos obtenido resultados y si ha coincidido la contraseña en tal caso
-            if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].password))) {
+        connectionbd.query('SELECT * FROM usuarios WHERE email = ?', [email], async (error, results) => {
+            if (results.length === 0 || !(await bcryptjs.compare(pass, results[0].password))) {
                 res.render('login', {
                     alert: true,
                     alertTitle: "Error",
@@ -122,7 +110,6 @@ rutas.post('/auth', async (req, res) => {
                     login: false
                 });
             } else {
-                // Creamos una variable de sesión y le asignamos true
                 req.session.loggedin = true;
                 req.session.name = results[0].nombre;
                 req.session.rol = results[0].rol_id;
@@ -153,91 +140,46 @@ rutas.post('/auth', async (req, res) => {
     }
 });
 
-// 12 - Renderización para la ruta principal / de la vista index.ejs
+// 12 - Renderización para la ruta principal /
 rutas.get('/', (req, res) => {
-    // Si existe la variable que guarda la autenticación
-    if (req.session.loggedin) {
-        // Renderizamos index, asignándole el nombre de usuario y la variable login con valor true
-        res.render('index', {
-            login: true,
-            name: req.session.name
-        });
-    } else {
-        // Renderizamos index, asignándole el texto a name y la variable login con valor false
-        res.render('index', {
-            login: false,
-            name: 'Debe iniciar sesión'
-        });
-    }
-    res.end();
-});
-
-// 12B - Renderización para la ruta /login de la vista login.ejs
-rutas.get('/login', (req, res) => {
-    // Si existe la variable que guarda la autenticación
-    if (req.session.loggedin) {
-        // Renderizamos login, asignándole el nombre de usuario y la variable login con valor true
-        res.render('login', {
-            login: true
-        });
-    } else {
-        // Renderizamos login, asignándole el texto a name y la variable login con valor false
-        res.render('login', {
-            login: false
-        });
-    }
-    res.end();
-});
-
-// 12C - Renderización para la ruta /registro de la vista register.ejs
-rutas.get('/registro', (req, res) => {
-    // Si existe la variable que guarda la autenticación
-    if (req.session.loggedin) {
-        // Renderizamos register, asignándole el nombre de usuario y la variable login con valor true
-        res.render('register', {
-            login: true
-        });
-    } else {
-        // Renderizamos register, asignándole el texto a name y la variable login con valor false
-        res.render('register', {
-            login: false
-        });
-    }
-    res.end();
-});
-
-// 12D - Renderización para la ruta /admin de la vista admin.ejs
-rutas.get('/admin', (req, res) => {
-    connectionbd.query('SELECT * FROM usuarios', (error, results) => {
-        if (error) {
-            throw error;
-        } else {
-            if (req.session.loggedin) {
-                res.render('admin', {
-                    login: true,
-                    name: req.session.name,
-                    rol: req.session.rol,
-                    results: results
-                });
-            } else {
-                res.render('admin', {
-                    login: false,
-                    name: "Área privada, inicie sesión para poder acceder al contenido",
-                    rol: '',
-                    results: results
-                });
-            }
-        }
+    res.render('index', {
+        login: req.session.loggedin,
+        name: req.session.loggedin ? req.session.name : 'Debe iniciar sesión'
     });
 });
 
-//13 Ruta para renderizar y gestionar usuarios CRUD ******************************************************************************************
+// 12B - Renderización para la ruta /login
+rutas.get('/login', (req, res) => {
+    res.render('login', {
+        login: req.session.loggedin
+    });
+});
+
+// 12C - Renderización para la ruta /registro
+rutas.get('/registro', (req, res) => {
+    res.render('register', {
+        login: req.session.loggedin
+    });
+});
+
+// 12D - Renderización para la ruta /admin
+rutas.get('/admin', (req, res) => {
+    connectionbd.query('SELECT * FROM usuarios', (error, results) => {
+        if (error) throw error;
+        res.render('admin', {
+            login: req.session.loggedin,
+            name: req.session.name,
+            rol: req.session.rol,
+            results: results
+        });
+    });
+});
+
+// 13 - Ruta para renderizar y gestionar usuarios CRUD
 rutas.get('/usuarios', (req, res) => {
     if (req.session.loggedin) {
         connectionbd.query('SELECT * FROM usuarios', (error, results) => {
-            if (error) {
-                return res.status(500).send("Error al obtener usuarios.");
-            }
+            if (error) return res.status(500).send("Error al obtener usuarios.");
             res.render('usuarios', {
                 login: true,
                 name: req.session.name,
@@ -253,7 +195,7 @@ rutas.get('/usuarios', (req, res) => {
     }
 });
 
-// Ruta para manejar la creación de un nuevo usuario
+// Crear nuevo usuario
 rutas.post('/usuarios', async (req, res) => {
     const { nombre, apellido, email, telefono, rol_id, password } = req.body;
 
@@ -262,15 +204,9 @@ rutas.post('/usuarios', async (req, res) => {
     }
 
     try {
-        let passwordHash = await bcryptjs.hash(password, 8);
-
+        const passwordHash = await bcryptjs.hash(password, 8);
         connectionbd.query('INSERT INTO usuarios SET ?', {
-            nombre,
-            apellido,
-            email,
-            telefono,
-            rol_id,
-            password: passwordHash
+            nombre, apellido, email, telefono, rol_id, password: passwordHash
         }, (error) => {
             if (error) {
                 console.log(error);
@@ -284,11 +220,12 @@ rutas.post('/usuarios', async (req, res) => {
     }
 });
 
-// Ruta para editar usuario (cargar el usuario a editar)
+// Editar usuario
 rutas.get('/usuarios/edit/:id', (req, res) => {
     const id = req.params.id;
     connectionbd.query('SELECT * FROM usuarios WHERE id = ?', [id], (error, results) => {
-        if (error || results.length === 0) return res.status(404).send("Usuario no encontrado.");
+        if (error || results.length === 0) 
+            return res.status(404).send("Usuario no encontrado.");
 
         res.render('edit', {
             usuario: results[0],
@@ -298,34 +235,25 @@ rutas.get('/usuarios/edit/:id', (req, res) => {
     });
 });
 
-// Ruta para actualizar usuario
+// Actualizar usuario
 rutas.post('/usuarios/edit/:id', async (req, res) => {
     const id = req.params.id;
     const { nombre, apellido, email, telefono, rol_id, password } = req.body;
 
+    let updateData = { nombre, apellido, email, telefono, rol_id };
+
     // Encriptar nueva contraseña si se proporciona
-    let passwordHash;
     if (password) {
-        passwordHash = await bcryptjs.hash(password, 8);
+        updateData.password = await bcryptjs.hash(password, 8);
     }
 
-    // Actualizar en la base de datos
-    connectionbd.query('UPDATE usuarios SET ? WHERE id = ?', [
-        {
-            nombre,
-            apellido,
-            email,
-            telefono,
-            rol_id,
-            ...(password ? { password: passwordHash } : {})
-        }, id
-    ], (error) => {
+    connectionbd.query('UPDATE usuarios SET ? WHERE id = ?', [updateData, id], (error) => {
         if (error) return res.status(500).send("Error al actualizar el usuario.");
         res.redirect('/usuarios'); // Redirigir a la vista de usuarios
     });
 });
 
-// Ruta para eliminar usuario
+// Eliminar usuario
 rutas.get('/usuarios/delete/:id', (req, res) => {
     const id = req.params.id;
     connectionbd.query('DELETE FROM usuarios WHERE id = ?', [id], (error) => {
@@ -334,15 +262,101 @@ rutas.get('/usuarios/delete/:id', (req, res) => {
     });
 });
 
-// 14 - Ruta que será cargada para destruir la sesión y redirigir a la página principal
-rutas.get('/logout', function (req, res) {
-    // Destruye la sesión.
+// 14 - Ruta para destruir la sesión y redirigir a la página principal
+rutas.get('/logout', (req, res) => {
     req.session.destroy(() => {
-        res.redirect('/') // Siempre se ejecutará después de que se destruya la sesión
+        res.redirect('/');
     });
 });
 
+// **************** Ruta para renderizar y gestionar proveedores CRUD ****************
+rutas.get('/proveedores', (req, res) => {
+    if (req.session.loggedin) {
+        connectionbd.query('SELECT * FROM proveedores', (error, results) => {
+            if (error) return res.status(500).send("Error al obtener proveedores.");
+            res.render('proveedores', {
+                login: true,
+                name: req.session.name,
+                rol: req.session.rol,
+                results: results // Pasamos la lista de proveedores a la vista
+            });
+        });
+    } else {
+        res.render('proveedores', {
+            login: false,
+            name: "Área privada, inicie sesión para poder acceder al contenido."
+        });
+    }
+});
 
+// Ruta para manejar la creación de un nuevo proveedor
+rutas.post('/proveedores', async (req, res) => {
+    const { nombre, telefono, web, email } = req.body;
+
+    if (!nombre || !telefono || !web || !email) {
+        return res.status(400).send("Todos los campos son obligatorios.");
+    }
+
+    try {
+        connectionbd.query('INSERT INTO proveedores SET ?', {
+            nombre, telefono, web, email,
+        }, (error) => {
+            if (error) {
+                console.log(error);
+                return res.status(500).send("Error al registrar el proveedor.");
+            }
+            res.redirect('/proveedores'); // Redirigir a la vista de proveedores
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Ocurrió un error en el servidor.");
+    }
+});
+
+// Ruta para editar proveedor (cargar el proveedor a editar)
+rutas.get('/proveedores/edit/:id', (req, res) => {
+    const id = req.params.id;
+    connectionbd.query('SELECT * FROM proveedores WHERE id = ?', [id], (error, results) => {
+        if (error || results.length === 0) {
+            return res.status(404).send("Proveedor no encontrado.");
+        }
+        res.render('edit2', { proveedor: results[0], login: req.session.loggedin });
+    });
+});
+
+// Ruta para actualizar proveedores
+rutas.post('/proveedores/edit/:id', (req, res) => {
+    const id = req.params.id;
+    const { nombre, telefono, web, email } = req.body;
+
+    // Actualizar en la base de datos
+    connectionbd.query('UPDATE proveedores SET ? WHERE id = ?', [
+        { nombre, telefono, web, email },
+        id
+    ], (error) => {
+        if (error) {
+            console.error("Error al actualizar el proveedor:", error);
+            return res.status(500).send("Error al actualizar el proveedor.");
+        }
+        res.redirect('/proveedores'); // Redirigir a la vista de proveedores
+    });
+});
+
+// Eliminar proveedor
+rutas.post('/proveedores/delete/:id', (req, res) => {
+    const id = req.params.id;
+    connectionbd.query('DELETE FROM proveedores WHERE id = ?', [id], (error) => {
+        if (error) return res.status(500).send("Error al eliminar el proveedor.");
+        res.redirect('/proveedores'); // Redirigir a la vista de proveedor
+    });
+});
+
+// 14 - Ruta para destruir la sesión y redirigir a la página principal
+rutas.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
+});
 
 // Exportamos todas las rutas
 module.exports = rutas;
