@@ -240,7 +240,7 @@ rutas.post('/usuarios/edit/:id', async (req, res) => {
     const id = req.params.id;
     const { nombre, apellido, email, telefono, rol_id, password } = req.body;
 
-    let updateData = { nombre, apellido, email, telefono, rol_id };
+    let updateData = { nombre, apellido, email, telefono, rol_id, };
 
     // Encriptar nueva contraseña si se proporciona
     if (password) {
@@ -269,43 +269,43 @@ rutas.get('/logout', (req, res) => {
     });
 });
 
-// **************** Ruta para renderizar y gestionar proveedores CRUD ****************
-rutas.get('/proveedores', (req, res) => {
+// **************** Ruta para renderizar y gestionar profesionales CRUD ****************
+rutas.get('/profesionales', (req, res) => {
     if (req.session.loggedin) {
-        connectionbd.query('SELECT * FROM proveedores', (error, results) => {
-            if (error) return res.status(500).send("Error al obtener proveedores.");
-            res.render('proveedores', {
+        connectionbd.query('SELECT * FROM profesionales', (error, results) => {
+            if (error) return res.status(500).send("Error al obtener profesional.");
+            res.render('profesionales', {
                 login: true,
                 name: req.session.name,
                 rol: req.session.rol,
-                results: results // Pasamos la lista de proveedores a la vista
+                results: results // Pasamos la lista de profesionales a la vista
             });
         });
     } else {
-        res.render('proveedores', {
+        res.render('profesionales', {
             login: false,
             name: "Área privada, inicie sesión para poder acceder al contenido."
         });
     }
 });
 
-// Ruta para manejar la creación de un nuevo proveedor
-rutas.post('/proveedores', async (req, res) => {
-    const { nombre, telefono, web, email } = req.body;
+// Ruta para manejar la creación de un nuevo profesional
+rutas.post('/profesionales', async (req, res) => {
+    const { nombre, apellido, telefono, email, categoria } = req.body;
 
-    if (!nombre || !telefono || !web || !email) {
+    if (!nombre || !apellido || !telefono || !email || !categoria) {
         return res.status(400).send("Todos los campos son obligatorios.");
     }
 
     try {
-        connectionbd.query('INSERT INTO proveedores SET ?', {
-            nombre, telefono, web, email,
+        connectionbd.query('INSERT INTO profesionales SET ?', {
+            nombre, apellido, telefono, email, categoria
         }, (error) => {
             if (error) {
                 console.log(error);
-                return res.status(500).send("Error al registrar el proveedor.");
+                return res.status(500).send("Error al registrar el profesional.");
             }
-            res.redirect('/proveedores'); // Redirigir a la vista de proveedores
+            res.redirect('/profesionales'); // Redirigir a la vista de profesionales
         });
     } catch (error) {
         console.log(error);
@@ -313,41 +313,41 @@ rutas.post('/proveedores', async (req, res) => {
     }
 });
 
-// Ruta para editar proveedor (cargar el proveedor a editar)
-rutas.get('/proveedores/edit/:id', (req, res) => {
+// Ruta para editar profesional (cargar el profesional a editar)
+rutas.get('/profesionales/edit/:id', (req, res) => {
     const id = req.params.id;
-    connectionbd.query('SELECT * FROM proveedores WHERE id = ?', [id], (error, results) => {
+    connectionbd.query('SELECT * FROM profesionales WHERE id = ?', [id], (error, results) => {
         if (error || results.length === 0) {
-            return res.status(404).send("Proveedor no encontrado.");
+            return res.status(404).send("profesional no encontrado.");
         }
-        res.render('edit2', { proveedor: results[0], login: req.session.loggedin });
+        res.render('edit2', { profesional: results[0], login: req.session.loggedin });
     });
 });
 
-// Ruta para actualizar proveedores
-rutas.post('/proveedores/edit/:id', (req, res) => {
+// Ruta para actualizar profesionales
+rutas.post('/profesionales/edit/:id', (req, res) => {
     const id = req.params.id;
-    const { nombre, telefono, web, email } = req.body;
+    const { nombre, apellido, telefono, email, categoria } = req.body;
 
     // Actualizar en la base de datos
-    connectionbd.query('UPDATE proveedores SET ? WHERE id = ?', [
-        { nombre, telefono, web, email },
+    connectionbd.query('UPDATE profesionales SET ? WHERE id = ?', [
+        { nombre, apellido, telefono, email, categoria },
         id
     ], (error) => {
         if (error) {
-            console.error("Error al actualizar el proveedor:", error);
-            return res.status(500).send("Error al actualizar el proveedor.");
+            console.error("Error al actualizar el profesional:", error);
+            return res.status(500).send("Error al actualizar el profesional.");
         }
-        res.redirect('/proveedores'); // Redirigir a la vista de proveedores
+        res.redirect('/profesionales'); // Redirigir a la vista de profesionales
     });
 });
 
-// Eliminar proveedor
-rutas.post('/proveedores/delete/:id', (req, res) => {
+// Eliminar profesional
+rutas.get('/profesionales/delete/:id', (req, res) => {
     const id = req.params.id;
-    connectionbd.query('DELETE FROM proveedores WHERE id = ?', [id], (error) => {
-        if (error) return res.status(500).send("Error al eliminar el proveedor.");
-        res.redirect('/proveedores'); // Redirigir a la vista de proveedor
+    connectionbd.query('DELETE FROM profesionales WHERE id = ?', [id], (error) => {
+        if (error) return res.status(500).send("Error al eliminar el profesional.");
+        res.redirect('/profesionales'); // Redirigir a la vista de profesionales
     });
 });
 

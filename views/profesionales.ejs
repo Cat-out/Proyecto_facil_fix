@@ -4,17 +4,28 @@
 <%- include('partials/header'); -%>
 
 <div class="contenedor2">
-    <h1>Gestión de Proveedores</h1>
+    <h1>Profesionales</h1>
 
-    <button id="showFormBtn" class="btn-primary">Agregar Proveedor</button>
+    <button id="showFormBtn" class="btn-primary">Crear Profesional</button>
 
     <div class="login-form" id="userForm" style="display: none;">
-        <form action="/proveedores" method="POST">
+        <form action="/profesionales" method="POST">
             <br>
             <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="text" name="telefono" placeholder="Teléfono" required>
-            <input type="text" name="web" placeholder="Web" required>
+            <input type="text" name="apellido" placeholder="Apellido" required>
+            <input type="text" name="telefono" placeholder="Telefono" required>
             <input type="text" name="email" placeholder="Email" required>
+            <select id="categoria" name="categoria" class="select-css" tabindex="3">
+                <option value="1" selected>Otros/Varios</option>
+                <option value="2">Electricidad</option>
+                <option value="3">Plomeria</option>
+                <option value="4">Carpinteria</option>
+                <option value="5">Informatica</option>
+                <option value="6">Movimiento</option>
+
+
+            </select><br>
+
 
             <button type="submit" class="btn-login">ENVIAR</button>
         </form>
@@ -26,31 +37,34 @@
                 <tr class="bg-primary text-white">
                     <th scope="col">ID</th>
                     <th scope="col">NOMBRE</th>
+                    <th scope="col">APELLIDO</th>
                     <th scope="col">TELEFONO</th>
-                    <th scope="col">WEB</th>
                     <th scope="col">EMAIL</th>
+                    <th scope="col">CATEGORIA</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
             </thead>
             <tbody>
                 <% if (results.length > 0) { %>
-                    <% results.forEach((proveedor) => { %>
+                    <% results.forEach((profesional) => { %>
                         <tr>
-                            <td><%= proveedor.id %></td>
-                            <td><%= proveedor.nombre %></td>
-                            <td><%= proveedor.telefono %></td>
-                            <td><%= proveedor.web %></td>
-                            <td><%= proveedor.email %></td>
+                            <td><%= profesional.id %></td>
+                            <td><%= profesional.nombre %></td>
+                            <td><%= profesional.apellido %></td>
+                            <td><%= profesional.telefono %></td>
+                            <td><%= profesional.email %></td>
+                            <td><%= profesional.categoria %></td>
+
                             <td>
-                                <a href="/proveedores/edit/<%= proveedor.id %>" class="btn btn-outline-info"><i class='bx bxs-edit'></i> Editar</a>                                <form action="/proveedores/delete/<%= proveedor.id %>" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proveedor?');">
-                                    <button type="submit" class="btn btn-outline-danger"><i class='bx bxs-trash-alt'></i> Borrar</button>
+                                <a href="/profesionales/edit/<%= profesional.id %>" class="btn btn-outline-info"><i class='bx bxs-edit'></i> Editar</a>
+                                <a href="/profesionales/delete/<%= profesional.id %>" class="btn btn-outline-danger"><i class='bx bxs-trash-alt'></i> Borrar</a>
                                 </form>
                             </td>
                         </tr>
                     <% }) %>
                 <% } else { %>
                     <tr>
-                        <td colspan="6">No hay proveedores registrados.</td>
+                        <td colspan="6">No hay profesionales registrados.</td>
                     </tr>
                 <% } %>
             </tbody>

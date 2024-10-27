@@ -3,25 +3,36 @@
 <%- include('partials/header', { login: login }); -%>
 
 <div class="container">
-    <h2>Editar Proveedor</h2>
-    <form action="/proveedores/edit/<%= proveedor.id %>" method="POST">
+    <br><h2>Editar Profesional</h2>
+    <form action="/profesionales/edit/<%= profesional.id %>" method="POST">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= proveedor.nombre %>" required>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= profesional.nombre %>" required>
+        </div>
+        <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" value="<%= profesional.apellido %>" required>
         </div>
         <div class="mb-3">
             <label for="telefono" class="form-label">Teléfono</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" value="<%= proveedor.telefono %>" required>
-        </div>
-        <div class="mb-3">
-            <label for="web" class="form-label">Web</label>
-            <input type="text" class="form-control" id="web" name="web" value="<%= proveedor.web %>" required>
+            <input type="text" class="form-control" id="telefono" name="telefono" value="<%= profesional.telefono %>" required>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="<%= proveedor.email %>" required>
+            <input type="text" class="form-control" id="email" name="email" value="<%= profesional.email %>" required>
         </div>
-        <button type="submit" class="btn btn-primary">Actualizar Proveedor</button>
+        <div class="mb-3">
+            <label for="categoria" class="form-label">Categoría</label>
+            <select id="categoria" name="categoria" class="select-css" tabindex="3">
+                <option value="1" <% if (profesional.categoria == 1) { %> selected <% } %>>Otros/Varios</option>
+                <option value="2" <% if (profesional.categoria == 2) { %> selected <% } %>>Electricidad</option>
+                <option value="3" <% if (profesional.categoria == 3) { %> selected <% } %>>Plomería</option>
+                <option value="4" <% if (profesional.categoria == 4) { %> selected <% } %>>Carpintería</option>
+                <option value="5" <% if (profesional.categoria == 5) { %> selected <% } %>>Informática</option>
+                <option value="6" <% if (profesional.categoria == 6) { %> selected <% } %>>Movimiento</option>
+            </select><br>
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar Profesional</button>
     </form>
 </div>
 
