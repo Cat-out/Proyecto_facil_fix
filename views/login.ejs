@@ -11,14 +11,13 @@
     </script>    
 <% } else { %>
     <div class="register-form">
-        <h1>Login Inventario</h1>
+        <h1>Login</h1>
         <form action="/auth" method="post">
             <input type="email" name="email" id="email" placeholder="Email" required>
             <input type="password" name="pass" id="pass" placeholder="Contraseña" required>
-            <input type="submit" class="btn-login" value="Login">
+            <input type="submit" class="btn btn-login" value="Login">
         </form>
-        
-        <a href="/registro" class="btn-register">Registro</a>
+<a href="/registro" class="btn btn-register">Registro</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

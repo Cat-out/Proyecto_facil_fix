@@ -144,7 +144,7 @@ rutas.post('/auth', async (req, res) => {
 rutas.get('/', (req, res) => {
     res.render('index', {
         login: req.session.loggedin,
-        name: req.session.loggedin ? req.session.name : 'Debe iniciar sesión'
+        name: req.session.loggedin ? req.session.name : ''
     });
 });
 
