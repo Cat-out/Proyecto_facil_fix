@@ -227,7 +227,7 @@ body {
     line-height: 1.5; /* Altura de línea */
 }
 
-.register-form h1 {
+.register-form h1, h2 {
     text-align: center;
     color: lightslategray;
     padding: 70px 0 10px 0;
@@ -365,8 +365,8 @@ body {
 
 /* ------------- footer --------- */
 footer {
-    background-color: rgb(144, 189, 188);
-    color: black;
+    background-color: lightslategrey;
+    color: white;
     padding: 20px 0;
     text-align: center;
 
@@ -398,7 +398,7 @@ footer {
     /* Propiedades de fuente */
     font-family: Arial, sans-serif; /* Cambia a la fuente que desees */
     font-weight: normal; /* Peso de la fuente */
-    font-size: 16px; /* Tamaño de fuente */
+    font-size: 22px; /* Tamaño de fuente */
 }
 
 .footer-section p, .footer-section ul {
@@ -420,7 +420,7 @@ footer {
 }
 
 .footer-section ul li a {
-    color: black;
+    color: white;
     text-decoration: none;
 
     /* Propiedades de fuente */
@@ -450,11 +450,9 @@ footer {
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
     overflow: hidden; /* Garantiza que la imagen no se desborde */
-    width: 300px; /* El tamaño fijo garantiza que sea cuadrado */
-    height: 300px; /* Altura igual que el ancho para un contenedor cuadrado */
+    width: 560px; /* El tamaño fijo garantiza que sea cuadrado */
+    height: 520px; /* Altura igual que el ancho para un contenedor cuadrado */
     border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 1.0); /* Sombra alrededor del contenedor */
-    border: 1px solid black; /* Borde negro de 1px */
     margin: 20px auto; /* Opcional: añade márgenes automáticos para centrar en su contenedor padre */
 }
 

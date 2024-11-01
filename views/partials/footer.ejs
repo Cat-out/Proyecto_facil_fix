@@ -1,36 +1,49 @@
-    <!-- fin del contenido principal de la página -->
-    <!-- contenido del footer-->
-    <br>
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Sobre el proyecto</h3>
-                <p>Proyecto de Node para trabajar las sesiones, vistas, registros...</p>
+<footer class="py-3 my-4 border-top">
+    <div class="container">
+        <div class="row">
+            <!-- Logo y Derechos Reservados -->
+            <div class="col-md-3 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                    <img src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap Logo" width="30" height="24">
+                </a>
+                <span class="text-muted">© 2023 FACILFIX</span>
             </div>
-            <div class="footer-section">
-                <h3>Enlaces Rápidos</h3>
-                <ul>
-                    <% if (login) { %>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/admin">Administración</a></li>
-                        <li><a href="logout">Cerrar sesión</a></li>
-                    <% } else { %>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/login">Iniciar sesión</a></li>
-                        <li><a href="/registro">Registro</a></li>
-                    <% } %>
+
+            <!-- Primera Columna de Enlaces -->
+            <div class="col-md-3">
+                <h5>Sección</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Inicio</a></li>
+                    <li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Características</a></li>
+                    <li class="nav-item mb-2"><a href="/pricing" class="nav-link p-0 text-muted">Precios</a></li>
+                    <li class="nav-item mb-2"><a href="/faqs" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">Acerca</a></li>
                 </ul>
             </div>
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <p>Email: info@IronHack.com</p>
-                <p>Teléfono: 666 777 888</p>
+
+            <!-- Segunda Columna de Enlaces -->
+            <div class="col-md-3">
+                <h5>Sección</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Inicio</a></li>
+                    <li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Características</a></li>
+                    <li class="nav-item mb-2"><a href="/pricing" class="nav-link p-0 text-muted">Precios</a></li>
+                    <li class="nav-item mb-2"><a href="/faqs" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">Acerca</a></li>
+                </ul>
+            </div>
+
+            <!-- Tercera Columna de Enlaces -->
+            <div class="col-md-3">
+                <h5>Sección</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Inicio</a></li>
+                    <li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Características</a></li>
+                    <li class="nav-item mb-2"><a href="/pricing" class="nav-link p-0 text-muted">Precios</a></li>
+                    <li class="nav-item mb-2"><a href="/faqs" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">Acerca</a></li>
+                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            &copy; 2024 IronHack. Todos los derechos reservados.
-        </div>
-    </footer>
-    <!-- fin del contenido del footer -->
-</body>
-</html>
+    </div>
+</footer>
